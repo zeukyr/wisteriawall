@@ -1,0 +1,7 @@
+import os
+ACCESS_SECRET = os.getenv("ACCESS_SECRET", "d0b712fa2be41d73e7f8acced65fa99f4c1775922f1b3f3190ac34228384cb47")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+SUPABASE_URL = "https://rdcyyxhwrelvedxgabes.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkY3l5eGh3cmVsdmVkeGdhYmVzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjQzNjQ3NSwiZXhwIjoyMDcyMDEyNDc1fQ.6f7-CYfwaDE9zC5tf2XaKHbspGbFbh6YjF7jNhnkRyE"
