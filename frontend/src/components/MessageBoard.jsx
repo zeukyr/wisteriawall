@@ -5,13 +5,22 @@ import { useNavigate } from "react-router-dom";
 const MessageBoard = () => {
   const [messageData, setMessageData] = useState([]);
   const navigate = useNavigate();
+  const [space, setSpace] = useState("general");
+  const [spaces, setSpaces] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/posts?space=general")
+      .get(`http://127.0.0.1:8000/api/posts?space=${space}`)
       .then((response) => setMessageData(response.data.data))
       .catch((error) => console.log(error));
-  }, []);
+  }, [space]);
+
+  useEffect(() => {
+    axios
+    .get("http://127.0.0.1:8000/api/spaces")
+    .then((response) => setSpaces(response.data.data) ) 
+    .catch((error) => console.log(error)); }, []);
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -19,6 +28,21 @@ const MessageBoard = () => {
         <h1 className="text-4xl font-bold mb-6 text-purple-600 text-center md:text-left">
           General Message Board
         </h1>
+        <div className="flex gap-3 mb-6 flex-wrap">
+            {spaces.map((s) => (
+                <button
+                key={s}
+                onClick={() => setSpace(s)}
+                className={`px-4 py-2 rounded-xl font-semibold transition-colors ${
+                    space === s
+                    ? "bg-purple-600 text-white shadow-md"
+                    : "bg-white text-purple-700 border-2 border-purple-500 hover:bg-purple-50"
+                }`}
+                >
+                {s.charAt(0).toUpperCase() + s.slice(1)}
+                </button>
+            ))}</div>
+
 
         <div className="flex justify-center md:justify-start mb-8">
           <button

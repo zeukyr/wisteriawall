@@ -6,6 +6,12 @@ from fastapi import HTTPException
 
 router = APIRouter(prefix="/api", tags=["posts"])
 
+@router.get("/spaces")
+def get_spaces():
+    spaces = supabase.table("messages").select("space").execute()
+    unique_spaces = list({item['space'] for item in spaces.data})
+    return {"data": unique_spaces}
+
 @router.get("/posts/{post_id}")
 def get_post(post_id: int):
     post = supabase.table("messages").select("*").eq("id", post_id).execute()
