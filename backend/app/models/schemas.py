@@ -18,3 +18,7 @@ class PostRequest(BaseModel):
     space: str
     title: str
     body: str
+
+class ReplyRequest(BaseModel):
+    space: str
+    body: str

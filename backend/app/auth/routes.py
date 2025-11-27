@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from argon2 import PasswordHasher
 from app.db.supabase_client import supabase
-from app.models.schemas import SignupRequest, LoginRequest
+from app.models.schemas import SignupRequest, LoginRequest, ReplyRequest
 from app.auth.tokens import create_access_token
 from datetime import timedelta
+from app.auth.deps import get_current_user
 
 
 router = APIRouter(prefix="/api", tags=["auth"])

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import LandingPage from './components/LandingPage'
 import Login from './components/Login'
+import DetailedPost from './components/DetailedPost'
 import ShowData from './components/ShowData'
 import Signup from './components/Signup'
 import MessageBoard from './components/MessageBoard'
@@ -16,7 +17,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
+        <Route path="/posts/:id" element={<DetailedPost />} />
         <Route path="/board" element={<MessageBoard />} />
         <Route path="/new-post" element={<AddPostForm />} />
     </Routes>

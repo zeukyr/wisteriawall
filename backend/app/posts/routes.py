@@ -1,10 +1,20 @@
 from fastapi import APIRouter, Depends
 from app.db.supabase_client import supabase
-from app.models.schemas import PostRequest
+from app.models.schemas import PostRequest, ReplyRequest
 from app.auth.deps import get_current_user
-
+from fastapi import HTTPException
 
 router = APIRouter(prefix="/api", tags=["posts"])
+
+@router.get("/posts/{post_id}")
+def get_post(post_id: int):
+    post = supabase.table("messages").select("*").eq("id", post_id).execute()
+    if not post.data or len(post.data) == 0:
+        raise HTTPException(status_code=404, detail="Post not found")
+    replies = supabase.table("messages").select("*").eq("parent_id", post_id).execute()
+    return {**post.data[0],
+            "replies": replies.data} 
+
 
 @router.get("/posts")
 def get_posts(
@@ -34,4 +44,27 @@ def create_post(data: PostRequest, user: int = Depends(get_current_user)):
         "author_id": user["id"]
     }
     response = supabase.table("messages").insert(new_row).execute()
+    return response
+
+
+@router.post("/posts/{post_id}/replies")
+def reply_to_post(post_id: int, data: ReplyRequest, user: int = Depends(get_current_user)):
+    parent = supabase.table("messages").select("*").eq("id", post_id).execute()
+    if not parent: 
+        raise HTTPException(status_code=404, detail="Post not found")
+    new_reply = {
+        "space": data.space,  
+        "title": "",
+        "body": data.body,
+        "parent_id": post_id,
+        "author_id": user["id"]}
+    
+    response = supabase.table("messages").insert(new_reply).execute()
+    supabase.table("messages").update({
+        "replies_count": supabase.table("messages")
+                               .select("replies_count")
+                               .eq("id", post_id)
+                               .execute().data[0]["replies_count"] + 1
+    }).eq("id", post_id).execute()
+
     return response

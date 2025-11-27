@@ -2,58 +2,73 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const MessageBoard = () => {
-    const [messageData, setMessageData] = useState([])
-    const navigate = useNavigate();
-    console.log(messageData)
-    
-    useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/posts?space=general")
-            .then(function (response) {
-            setMessageData(response.data.data)
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-        }, [])
+  const [messageData, setMessageData] = useState([]);
+  const navigate = useNavigate();
 
-    return (
-        <div className="min-h-screen bg-white p-8">
-            <h1 className="text-4xl font-bold text-left mb-8 text-purple-600 block">
-                General Message Board
-            </h1>
-            <button className="w-72 mb-5 bg-white text-purple-700 font-semibold py-4 px-6 rounded-xl border-2 border-purple-500 shadow-md hover:bg-purple-50 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200" onClick={() => navigate("/new-post")}>
-            + Create New Post </button>
-            
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {messageData.length > 0 ? (
-                    messageData.map(message => (
-                        <div 
-                            key={message.id} 
-                            className="bg-white rounded-lg shadow-md transition-shadow p-6 border border-gray-200"
-                        >
-                            <h3 className="text-xl font-bold text-gray-800 mb-3">
-                                {message.title}
-                            </h3>
-                            <p className="text-gray-600 mb-4">
-                                {message.body}
-                            </p>
-                            <div className="flex items-center text-sm text-gray-500">
-                                <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full">
-                                    Created at {new Date(message.created_at).toLocaleString()}
-                                </span>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="col-span-full text-center text-gray-500 text-xl">
-                        Loading...
-                    </div>
-                )}
-            </div>
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/posts?space=general")
+      .then((response) => setMessageData(response.data.data))
+      .catch((error) => console.log(error));
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold mb-6 text-purple-600 text-center md:text-left">
+          General Message Board
+        </h1>
+
+        <div className="flex justify-center md:justify-start mb-8">
+          <button
+            onClick={() => navigate("/new-post")}
+            className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+          >
+            + Create New Post
+          </button>
         </div>
-    )}
-        
-    
-export default MessageBoard
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {messageData.length > 0 ? (
+            messageData.map((message) => (
+              <div
+                key={message.id}
+                className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 flex flex-col justify-between transition-transform transform hover:-translate-y-1 hover:shadow-2xl"
+              >
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3 truncate">
+                    {message.title || "No Title"}
+                  </h3>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    {message.body}
+                  </p>
+                </div>
+
+                <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                  <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">
+                    Posted at {new Date(message.created_at).toLocaleString()} by{" "}
+                    {message.author?.display_name || "Anonymous"}
+                  </span>
+
+                  <button
+                    onClick={() => navigate(`/posts/${message.id}`)}
+                    className="mt-2 sm:mt-0 bg-white text-purple-700 font-semibold py-2 px-4 rounded-xl border-2 border-purple-500 shadow-md hover:bg-purple-50 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    Expand
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500 text-xl py-20">
+              Loading...
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MessageBoard;

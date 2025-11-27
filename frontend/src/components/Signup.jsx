@@ -3,82 +3,105 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [display, setDisplay] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [display, setDisplay] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault(); 
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        axios.post('http://127.0.0.1:8000/api/signup', {
-            username: username,
-            password: password,
-            display_name: display,
-          })
-          .then(function (response) {
-            console.log(response.data);
-            navigate("/login");
-          })
-          .catch(function (error) {
-            if (error.response?.data?.detail) {
-                setError(error.response.data.detail);
-            } else if (error.response?.data?.message) {
-                setError(error.response.data.message);
-            } else if (error.response?.data?.error) {
-                setError(error.response.data.error);
-            } else {
-                setError('Failed to create account. Please try again.');
-            }        
-            console.log(error);
-          });
-        
-    }
+    axios
+      .post("http://127.0.0.1:8000/api/signup", {
+        username,
+        password,
+        display,
+      })
+      .then(() => navigate("/login"))
+      .catch((err) => {
+        setError(
+          err.response?.data?.detail ||
+            err.response?.data?.message ||
+            err.response?.data?.error ||
+            "Failed to create account. Please try again."
+        );
+      });
+  };
 
-    return (
-        <div className="m-8">
-            <h1 className="text-3xl font-bold text-left text-gray-800 mb-2"> Create an Account </h1>
-            <form onSubmit={handleSubmit}>
-                    <label className="block text-large font-semibold text-gray-700 mb-2"> Username 
-                    </label>
-                    <input 
-                        type="text" 
-                        name="username" 
-                        placeholder="enter username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-72 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors mb-4"
-                        required
-                        />
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="bg-white shadow-lg rounded-2xl p-10 w-full max-w-md">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Create an Account
+        </h1>
 
-                    <label className="block text-large font-semibold text-gray-700 mb-3"> Password 
-                    </label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        placeholder="enter password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-72 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors mb-4"
-                        required
-    />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <input
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-colors"
+            />
+          </div>
 
-                    <label className="block text-large font-semibold text-gray-700 mb-3"> Display name (optional) 
-                    </label>
-                    <input
-                        type="text" 
-                        name="display" 
-                        placeholder="enter display name"
-                        value={display}
-                        onChange={(e) => setDisplay(e.target.value)}
-                        className="block w-72 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors mb-4"/>
-                    
-                    <button type="submit" className="w-72 bg-white text-purple-700 font-semibold py-4 px-6 rounded-xl border-2 border-purple-500 shadow-md hover:bg-purple-50 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"> Create an Account </button>
-                </form>
-            {error && <p className="text-red-500"> {error} </p>}
-        </div>
-        )
-    }
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-colors"
+            />
+          </div>
 
-export default Signup
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">
+              Display Name (optional)
+            </label>
+            <input
+              type="text"
+              placeholder="Enter display name"
+              value={display}
+              onChange={(e) => setDisplay(e.target.value)}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-colors"
+            />
+          </div>
+
+          {error && (
+            <p className="text-red-500 text-sm mt-1 text-center">{error}</p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
+          >
+            Create Account
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-gray-500 text-sm">
+          Already have an account?{" "}
+          <span
+            className="text-purple-600 font-semibold cursor-pointer hover:underline"
+            onClick={() => navigate("/login")}
+          >
+            Log in
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
