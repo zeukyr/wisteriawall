@@ -12,13 +12,17 @@ def get_posts(
     page: int = 1,
     pageSize: int = 20
 ): 
-    response = supabase.table("messages").select("*").eq("space", space).is_("parent_id", None)
+    response = supabase.table("messages").select(
+        "*, author:users!messages_author_id_fkey(display_name, username)"
+    ).eq("space", space).is_("parent_id", None)
     response = response.order("created_at", desc=True)
     start = pageSize * (page - 1)
     end = start + pageSize
     response = response.range(start, end)
-    print(response)
-    return response.execute()
+    
+    result = response.execute()
+    print("Full result:", result.data)
+    return result
 
 @router.post("/posts")
 def create_post(data: PostRequest, user: int = Depends(get_current_user)): 

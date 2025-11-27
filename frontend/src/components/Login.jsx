@@ -45,9 +45,10 @@ const Login = ( { } ) => {
 
     return (
         <div className="m-8">
-            <h1 className="text-lg font-bold mb-5"> Sign In</h1>
+            <h1 className="text-3xl font-bold text-left text-gray-800 mb-2"> Sign In </h1>
+
             <form onSubmit={handleSubmit}>
-                <label className="block"> Username 
+            <label className="block text-large font-semibold text-gray-700 mb-2"> Username 
                 </label>
                 <input 
                     type="text" 
@@ -55,18 +56,20 @@ const Login = ( { } ) => {
                     placeholder="enter username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    className="w-72 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors mb-4"
                     />
 
-                <label className="block"> Password 
+                <label className="block text-large font-semibold text-gray-700 mb-2"> Password 
                 </label>
-                <input 
+                <input
                     type="password" 
                     name="password" 
                     placeholder="enter password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}/>
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-72 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors mb-4 block"/>
 
-                <button type="submit" className="block"> Log In </button>
+                <button type="submit" className="w-72 bg-white text-purple-700 font-semibold py-4 px-6 rounded-xl border-2 border-purple-500 shadow-md hover:bg-purple-50 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"> Log In </button>
             </form>
             {error && <p className="text-red-500"> {error} </p>}
         </div>
