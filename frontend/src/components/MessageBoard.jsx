@@ -5,15 +5,10 @@ import { useNavigate } from "react-router-dom";
 const MessageBoard = () => {
   const [messageData, setMessageData] = useState([]);
   const navigate = useNavigate();
-  const [space, setSpace] = useState("general");
+  const [space, setSpace] = useState("General");
   const [spaces, setSpaces] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/api/posts?space=${space}`)
-      .then((response) => setMessageData(response.data.data))
-      .catch((error) => console.log(error));
-  }, [space]);
+
 
   useEffect(() => {
     axios
@@ -21,12 +16,18 @@ const MessageBoard = () => {
     .then((response) => setSpaces(response.data.data) ) 
     .catch((error) => console.log(error)); }, []);
 
+    useEffect(() => {
+        axios
+          .get(`http://127.0.0.1:8000/api/posts?space=${space}`)
+          .then((response) => setMessageData(response.data.data))
+          .catch((error) => console.log(error));
+      }, [space]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-purple-600 text-center md:text-left">
-          General Message Board
+        {space.charAt(0).toUpperCase() + space.slice(1)} Message Board
         </h1>
         <div className="flex gap-3 mb-6 flex-wrap">
             {spaces.map((s) => (

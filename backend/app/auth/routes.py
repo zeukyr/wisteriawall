@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from argon2 import PasswordHasher
 from app.db.supabase_client import supabase
 from app.models.schemas import SignupRequest, LoginRequest, ReplyRequest
