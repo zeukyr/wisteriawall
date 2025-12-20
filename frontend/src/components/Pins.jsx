@@ -2,63 +2,43 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MessageBoard = () => {
+const Pins = () => {
   const [messageData, setMessageData] = useState([]);
   const navigate = useNavigate();
-  const [space, setSpace] = useState("General");
-  const [spaces, setSpaces] = useState([]);
-
-
-
-  useEffect(() => {
-    axios
-    .get("http://127.0.0.1:8000/api/spaces")
-    .then((response) => setSpaces(response.data.data) ) 
-    .catch((error) => console.log(error)); }, []);
+  const token = localStorage.getItem("access_token");
 
     useEffect(() => {
         axios
-          .get(`http://127.0.0.1:8000/api/posts?space=${space}`)
-          .then((response) => setMessageData(response.data.data))
-          .catch((error) => console.log(error));
-      }, [space]);
+          .get(`http://127.0.0.1:8000/api/posts/pinned`, { 
+            headers: { Authorization: `Bearer ${token}` }})
+          .then((response) =>                 
+            setMessageData(response.data.data))
+          .catch((error) => {
+            if (error.response && error.response.status === 401) {
+                localStorage.removeItem("access_token");
+                navigate('/login'); } else {
+                    console.log(error);
+                }
+                });
+      }, []);
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-purple-600 text-center md:text-left">
-        {space.charAt(0).toUpperCase() + space.slice(1)} Message Board
+        Your Pins
         </h1>
         <div className="flex gap-3 mb-6 flex-wrap">
-            {spaces.map((s) => (
-                <button
-                key={s}
-                onClick={() => setSpace(s)}
-                className={`px-4 py-2 rounded-xl font-semibold transition-colors ${
-                    space === s
-                    ? "bg-purple-600 text-white shadow-md"
-                    : "bg-white text-purple-700 border-2 border-purple-500 hover:bg-purple-50"
-                }`}
+            <button
+                onClick={() => navigate('/board')}
+                className="mt-2 sm:mt-0 bg-white text-purple-700 font-semibold py-2 px-4 rounded-xl border-2 border-purple-500 shadow-md hover:bg-purple-50 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
                 >
-                {s.charAt(0).toUpperCase() + s.slice(1)}
+                Back to Board
                 </button>
-            ))}</div>
+            </div>
 
 
-        <div className="flex justify-center md:justify-start mb-8">
-          <button
-            onClick={() => navigate("/new-post")}
-            className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
-          >
-            + Create New Post
-          </button>
-          <button
-            onClick={() => navigate("/pinned")}
-            className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 ml-3"
-          >
-            See My Pins
-          </button>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {messageData.length > 0 ? (
@@ -93,7 +73,7 @@ const MessageBoard = () => {
             ))
           ) : (
             <div className="col-span-full text-center text-gray-500 text-xl py-20">
-              Loading...
+              No pins so far.
             </div>
           )}
         </div>
@@ -102,4 +82,4 @@ const MessageBoard = () => {
   );
 };
 
-export default MessageBoard;
+export default Pins;

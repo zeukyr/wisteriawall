@@ -15,6 +15,33 @@ def build_tree(messages, parent_id=None):
             tree.append(msg_copy)
     return tree
 
+@router.get("/posts/pinned")
+def get_pinned(
+    user=Depends(get_current_user),
+    page: int = 1,
+    pageSize: int = 20):
+    start = page
+    end = start + pageSize
+    pinned_query = (
+    supabase.table("user_pins")
+    .select("post_id")
+    .eq("user_id", user["id"])
+    .order("created_at", desc=True)
+)
+    pinned_data = pinned_query.range(start, end).execute().data
+
+    post_ids = [p["post_id"] for p in pinned_data]
+    posts = (
+        supabase.table("messages")
+        .select("*, author:users!messages_author_id_fkey(display_name, username)")
+        .in_("id", post_ids)
+        .order("created_at", desc=True)
+        .execute()
+    )
+
+    return {"data": posts.data}
+
+    
 @router.get("/posts/{post_id}/pin")
 def is_pinned(post_id: int, user=Depends(get_current_user)):
     pinned = supabase.table("user_pins").select("*").eq("user_id", user["id"]).eq("post_id", post_id).execute()
