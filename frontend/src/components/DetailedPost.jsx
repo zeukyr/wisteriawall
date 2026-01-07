@@ -11,6 +11,7 @@ const DetailedPost = () => {
   const [post, setPost] = useState(null);
   const [reply, setReply] = useState("");
   const [pinned, setPinned] = useState(false);
+  const [error, setError] = useState("")
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
@@ -52,6 +53,10 @@ const DetailedPost = () => {
   }
 
   const submitReply = () => {
+    if (!reply.trim()) {
+      setError("Please write a comment")
+    }
+    else {
     axios
       .post(
         `http://127.0.0.1:8000/api/posts/${id}/replies`,
@@ -66,6 +71,7 @@ const DetailedPost = () => {
         console.log(error);
       }});
   };
+};
 
   if (!post)
     return (
@@ -106,6 +112,8 @@ const DetailedPost = () => {
           >
             Reply
           </button>
+
+          {error && <p className="text-red-500 mt-2">{error}</p>}
 
         <div className="mt-8">
           <h3 className="text-lg font-semibold mb-3">Replies</h3>

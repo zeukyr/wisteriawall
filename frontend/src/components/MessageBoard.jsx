@@ -24,7 +24,7 @@ const MessageBoard = () => {
       }, [space]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-purple-600 text-center md:text-left">
         {space.charAt(0).toUpperCase() + space.slice(1)} Message Board

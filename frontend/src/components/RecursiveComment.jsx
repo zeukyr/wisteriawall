@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 const RecursiveComment = ({ id, body, author, created_at, replies, depth, activeReplyId, setActiveReplyId, post }) => {
     const [reply, setReply] = useState("");
     const token = localStorage.getItem("access_token");
-
+    const [error, setError] = useState("")
     const navigate = useNavigate(); 
     const submitReply = () => {
+      if (!reply.trim()) {
+        setError("Please write something before submitting!");
+        return;
+      }
+      else {    
         axios
           .post(
             `http://127.0.0.1:8000/api/posts/${id}/replies`,
@@ -22,6 +27,7 @@ const RecursiveComment = ({ id, body, author, created_at, replies, depth, active
             console.log(error);
           }});
       };
+    }
 
     return (
       <div className="ml-4 mt-4">
@@ -47,6 +53,8 @@ const RecursiveComment = ({ id, body, author, created_at, replies, depth, active
       </button>
       </div>
             )}
+          
+        {error && <p className="text-red-500 mt-2">{error}</p>}
 
   
         {replies?.length > 0 && (

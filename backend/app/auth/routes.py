@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from argon2 import PasswordHasher
 from app.db.supabase_client import supabase
-from app.models.schemas import SignupRequest, LoginRequest, ReplyRequest
+from app.models.schemas import SignupRequest, LoginRequest, ProfilePictureUpdate
 from app.auth.tokens import create_access_token
 from datetime import timedelta
 from app.auth.deps import get_current_user
+from fastapi import Depends, UploadFile
 
 
 router = APIRouter(prefix="/api", tags=["auth"])
@@ -41,3 +42,33 @@ def login(data: LoginRequest):
     access_token = create_access_token({"sub": str(user["id"])}, timedelta(hours=1))
     
     return {"message": "success", "access_token": access_token, "token_type": "bearer"}
+
+@router.get("/current_profile")
+def get_current_profile(
+    user = Depends(get_current_user)
+    
+):
+    print(f"User object: {user}")
+    avatar_url = user["avatar-url"]
+    display_name = user["display_name"]
+    username = user["username"]
+
+    
+    return {
+        "avatar_url": avatar_url,
+        "display_name": display_name,
+        "username": username
+        }
+    
+@router.put("/update_avatar")
+def update_avatar(
+    data: ProfilePictureUpdate,
+    user = Depends(get_current_user)
+):
+    try:
+        user_id = user[id]
+        response = supabase.table("users").update({"avatar_url": data.avatar_url}).eq("id", user_id).execute()
+        return {"message": "Avatar updated successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to update avatar")
