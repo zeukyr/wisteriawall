@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
 
     axios
-      .post("http://127.0.0.1:8000/api/login", { username, password })
+      .post(`${import.meta.env.VITE_API_URL}/api/login`, { username, password })
       .then((response) => {
         if (response.data.message === "success") {
           localStorage.setItem("access_token", response.data.access_token);

@@ -16,7 +16,7 @@ const DetailedPost = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/posts/${id}/pin`, {
+      .get(`${import.meta.env.VITE_API_URL}/api/posts/${id}/pin`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => setPinned(res.data.pin))
@@ -26,7 +26,7 @@ const DetailedPost = () => {
   
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/posts/${id}`, {
+      .get(`${import.meta.env.VITE_API_URL}/api/posts/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => setPost(res.data))
@@ -40,7 +40,7 @@ const DetailedPost = () => {
 
   const toggleButton = () => {
     axios
-    .post(`http://127.0.0.1:8000/api/posts/${id}/pin`, {}, {
+    .post(`${import.meta.env.VITE_API_URL}/api/posts/${id}/pin`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then((res) => setPinned(res.data.pin))
@@ -59,7 +59,7 @@ const DetailedPost = () => {
     else {
     axios
       .post(
-        `http://127.0.0.1:8000/api/posts/${id}/replies`,
+        `${import.meta.env.VITE_API_URL}/api/posts/${id}/replies`,
         { space: post.space, body: reply },
         { headers: { Authorization: `Bearer ${token}` } }
       )

@@ -12,7 +12,7 @@ const AccountSettings = ({ }) => {
     useEffect(() => {
         const token = localStorage.getItem("access_token");
 
-        axios.get("http://127.0.0.1:8000/api/current_profile", {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/current_profile`, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then((res) => {
@@ -30,7 +30,7 @@ const AccountSettings = ({ }) => {
         setEditing(false);
         const token = localStorage.getItem("access_token");
 
-        axios.put("http://127.0.0.1:8000/api/update_avatar", 
+        axios.put(`${import.meta.env.VITE_API_URL}/api/update_avatar`, 
             {
                 display_name: displayName,
                 avatar_url: profilePictureUrl,          

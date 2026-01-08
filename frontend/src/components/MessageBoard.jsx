@@ -12,13 +12,13 @@ const MessageBoard = () => {
 
   useEffect(() => {
     axios
-    .get("http://127.0.0.1:8000/api/spaces")
+    .get(`${import.meta.env.VITE_API_URL}/api/spaces`)
     .then((response) => setSpaces(response.data.data) ) 
     .catch((error) => console.log(error)); }, []);
 
     useEffect(() => {
         axios
-          .get(`http://127.0.0.1:8000/api/posts?space=${space}`)
+          .get(`${import.meta.env.VITE_API_URL}/api/posts?space=${space}`)
           .then((response) => setMessageData(response.data.data))
           .catch((error) => console.log(error));
       }, [space]);

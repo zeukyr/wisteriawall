@@ -6,7 +6,7 @@ const ShowData = () => {
     console.log(userData)
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/getinfo")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/getinfo`)
             .then(function (response) {
             setUserData(response.data.data)
           })

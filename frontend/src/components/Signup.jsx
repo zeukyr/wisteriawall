@@ -13,7 +13,7 @@ const Signup = () => {
     e.preventDefault();
 
     axios
-      .post("http://127.0.0.1:8000/api/signup", {
+      .post(`${import.meta.env.VITE_API_URL}/api/signup`, {
         username,
         password,
         display,

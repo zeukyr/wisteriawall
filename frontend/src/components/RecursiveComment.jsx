@@ -15,7 +15,7 @@ const RecursiveComment = ({ id, body, author, created_at, replies, depth, active
       else {    
         axios
           .post(
-            `http://127.0.0.1:8000/api/posts/${id}/replies`,
+            `${import.meta.env.VITE_API_URL}/api/posts/${id}/replies`,
             { space: post.space, body: reply },
             { headers: { Authorization: `Bearer ${token}` } }
           )

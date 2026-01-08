@@ -9,7 +9,7 @@ const Pins = () => {
 
     useEffect(() => {
         axios
-          .get(`http://127.0.0.1:8000/api/posts/pinned`, { 
+          .get(`${import.meta.env.VITE_API_URL}/api/posts/pinned`, { 
             headers: { Authorization: `Bearer ${token}` }})
           .then((response) =>                 
             setMessageData(response.data.data))

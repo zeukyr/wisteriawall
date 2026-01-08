@@ -29,7 +29,6 @@ function App() {
           <Route path="/settings" element={<AccountSettings />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
 
-
         </Route>
 
     </Routes>
