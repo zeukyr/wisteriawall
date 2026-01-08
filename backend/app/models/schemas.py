@@ -1,11 +1,13 @@
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 from typing import Optional
 class ProfilePictureUpdate(BaseModel):
-    avatar_url: HttpUrl
+    avatar_url: str = None
+    display_name: str = None
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class SignupRequest(BaseModel): 
     username: str

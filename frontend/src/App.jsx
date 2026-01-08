@@ -9,6 +9,7 @@ import AddPostForm from './components/AddPostForm'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout'
 import AccountSettings from './components/AccountSettings'
+import DeleteAccount from './components/DeleteAccount'
 
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route path="/new-post" element={<AddPostForm />} />
           <Route path="/pinned" element={<Pins />} />
           <Route path="/settings" element={<AccountSettings />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
+
 
         </Route>
 

@@ -26,6 +26,27 @@ const AccountSettings = ({ }) => {
         })
     }, [])
 
+    const handleSave = () => {
+        setEditing(false);
+        const token = localStorage.getItem("access_token");
+
+        axios.put("http://127.0.0.1:8000/api/update_avatar", 
+            {
+                display_name: displayName,
+                avatar_url: profilePictureUrl,          
+            },
+            {
+            headers: { Authorization: `Bearer ${token}` },
+    }
+)
+        .then((res) => {
+            console.log("Profile updated:", res.data);
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
     if (loading) {
         return (
           <div className="min-h-screen flex items-center justify-center text-gray-500 text-xl">
@@ -79,7 +100,7 @@ const AccountSettings = ({ }) => {
 
             {editing ? (
                 <button 
-                onClick={() => setEditing(false)}
+                onClick={() => handleSave()}
                 className="w-full bg-purple-600 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-purple-700 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                 Save Changes
                 </button>

@@ -66,9 +66,22 @@ def update_avatar(
     user = Depends(get_current_user)
 ):
     try:
-        user_id = user[id]
-        response = supabase.table("users").update({"avatar_url": data.avatar_url}).eq("id", user_id).execute()
-        return {"message": "Avatar updated successfully"}
+        user_id = user["id"]
+        response = supabase.table("users").update({"avatar-url": data.avatar_url, "display_name": data.display_name}
+        ).eq("id", user_id).execute()
+        return {"message": "Avatar updated successfully",
+                "data": response.data[0]}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to update avatar")
+@router.delete("/delete_account")
+def delete_account(
+    user = Depends(get_current_user)
+):
+    user_id = user["id"]
+    try: 
+        response = supabase.table("users").delete().eq("id", user_id).execute()
+        return {"message": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to delete account")
+

@@ -30,7 +30,10 @@ const Sidebar = () => {
 
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() => {
+            navigate("/")
+            localStorage.removeItem("access_token");
+          }}
           className="text-left px-4 py-2 rounded-lg text-gray-700  hover:bg-purple-100 hover:text-purple-700 transition"
         >
           Logout
