@@ -14,6 +14,7 @@ import DeleteAccount from './components/DeleteAccount'
 
 function App() {
   return (
+    
     <BrowserRouter>
     <Routes>
         <Route path="/" element={<LandingPage />} />

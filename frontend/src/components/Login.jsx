@@ -15,6 +15,7 @@ const Login = () => {
       .post(`${import.meta.env.VITE_API_URL}/api/login`, { username, password })
       .then((response) => {
         if (response.data.message === "success") {
+          console.log("API URL:", import.meta.env.VITE_API_URL)
           localStorage.setItem("access_token", response.data.access_token);
           navigate("/board");
         }
