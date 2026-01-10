@@ -15,6 +15,41 @@ def build_tree(messages, parent_id=None):
             tree.append(msg_copy)
     return tree
 
+@router.get("/posts/yours")
+def get_yours(
+    user=Depends(get_current_user),
+    page: int = 1,
+    pageSize: int = 20):
+        try: 
+            start = (page - 1) * pageSize
+            end = start + pageSize - 1
+            query = (supabase.table("messages")
+                    .select("id")
+                    .eq("author_id", user["id"])
+                    .is_("parent_id", None)
+                    .order("created_at", desc=True))
+            print(f"QUERY: {query}")
+            data = query.range(start, end).execute().data 
+            print(f"DATA: {data}") 
+
+
+            post_ids = []
+            for i in data: 
+                post_ids.append(i["id"])
+
+            posts = (supabase.table("messages")
+                    .select("*, author:users!messages_author_id_fkey(display_name, username)")
+                    .in_("id", post_ids)
+                    .order("created_at", desc=True)
+                    .execute())
+            print(f"POSTS: {posts}") 
+            return {"data": posts.data}
+        
+        except Exception as e:
+            print(f"FULL ERROR: {e}") 
+            raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/posts/pinned")
 def get_pinned(
     user=Depends(get_current_user),
@@ -105,7 +140,7 @@ def create_post(data: PostRequest, user: int = Depends(get_current_user)):
         "author_id": user["id"]
     }
     response = supabase.table("messages").insert(new_row).execute()
-    return response
+    return {"message": "success"}
 
 
 @router.post("/posts/{post_id}/replies")

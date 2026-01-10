@@ -28,6 +28,13 @@ const Sidebar = () => {
           View Pins
         </button>
 
+        <button
+          onClick={() => navigate("/your-posts")}
+          className="text-left px-4 py-2 rounded-lg text-gray-700 hover:bg-purple-100 hover:text-purple-700 transition"
+        >
+          Your Posts
+        </button>
+
 
         <button
           onClick={() => {

@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout'
 import AccountSettings from './components/AccountSettings'
 import DeleteAccount from './components/DeleteAccount'
+import YourPosts from './components/YourPosts'
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/pinned" element={<Pins />} />
           <Route path="/settings" element={<AccountSettings />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
+          <Route path="/your-posts" element={<YourPosts />} />
 
         </Route>
 

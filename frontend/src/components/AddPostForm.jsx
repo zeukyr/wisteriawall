@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const AddPostForm = ({ }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [space, setSpace] = useState("");
+  const [raw_space, setSpace] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ const AddPostForm = ({ }) => {
     e.preventDefault();
 
     const token = localStorage.getItem("access_token");
-
+    const space = raw_space.charAt(0).toUpperCase() + raw_space.slice(1).toLowerCase();
     axios
       .post(
         `${import.meta.env.VITE_API_URL}/api/posts`,
@@ -20,11 +20,13 @@ const AddPostForm = ({ }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((response) => {
+        console.log(response)
         if (response.data.message === "success") {
           navigate("/board");
         }
       })
       .catch((error) => {
+        console.log(error);
         if (error.response && error.response.status === 401) {
           localStorage.removeItem("access_token");
           navigate('/login');
@@ -64,7 +66,7 @@ const AddPostForm = ({ }) => {
             <input
               type="text"
               placeholder="whatever you want"
-              value={space}
+              value={raw_space}
               onChange={(e) => setSpace(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-colors"
               required

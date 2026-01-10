@@ -2,14 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Pins = () => {
+const YourPosts = () => {
   const [messageData, setMessageData] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
     useEffect(() => {
         axios
-          .get(`${import.meta.env.VITE_API_URL}/api/posts/pinned`, { 
+          .get(`${import.meta.env.VITE_API_URL}/api/posts/yours`, { 
             headers: { Authorization: `Bearer ${token}` }})
           .then((response) =>                 
             setMessageData(response.data.data))
@@ -28,7 +28,7 @@ const Pins = () => {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-purple-600 text-center md:text-left">
-        Your Pins
+        Your Posts
         </h1>
         <div className="flex gap-3 mb-6 flex-wrap">
             <button
@@ -74,7 +74,7 @@ const Pins = () => {
             ))
           ) : (
             <div className="col-span-full text-center text-gray-500 text-xl py-20">
-              No pins so far.
+              No posts so far.
             </div>
           )}
         </div>
@@ -83,4 +83,4 @@ const Pins = () => {
   );
 };
 
-export default Pins;
+export default YourPosts;
