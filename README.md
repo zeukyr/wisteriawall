@@ -60,32 +60,43 @@ Time Management: I built the majority of this project during my 1A term, while s
 # Installation and Setup
 
 Clone the project
+
 git clone https://github.com/zeukyr/eunoia.git
 
 Navigate to project directory
+
 cd eunoia
 
 Navigate to backend
+
 cd backend
 
 Active virtual environment
+
 python -m venv venv
+
 source venv/bin/activate
 
 Install dependencies
+
 pip install -r requirements.txt
 
 Start backend server
+
 uvicorn main:app --reload
 
 Navigate to the frontend 
+
 cd ..
+
 cd frontend
 
 Install dependencies
+
 npm install
 
 Run the frontend server
+
 npm run dev
 
 # Future Improvements
