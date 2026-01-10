@@ -55,8 +55,8 @@ def get_pinned(
     user=Depends(get_current_user),
     page: int = 1,
     pageSize: int = 20):
-    start = page
-    end = start + pageSize
+    start = (page - 1) * pageSize
+    end = start + pageSize - 1
     pinned_query = (
     supabase.table("user_pins")
     .select("post_id")
